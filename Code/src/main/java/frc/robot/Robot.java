@@ -4,12 +4,12 @@
 
 package frc.robot;
 
+import edu.wpi.first.util.sendable.SendableRegistry;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
-import edu.wpi.first.wpilibj.motorcontrol.addFollower;;;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -18,16 +18,17 @@ import edu.wpi.first.wpilibj.motorcontrol.addFollower;;;
  * directory.
  */
 public class Robot extends TimedRobot {
-  private final PWMSparkMax frontLeft = new PWMSparkMax(0);
-  private final PWMSparkMax frontLeftRot = new PWMSparkMax(1);
-  private final PWMSparkMax frontRight = new PWMSparkMax(2);
-  private final PWMSparkMax frontRightRot = new PWMSparkMax(3);
-  private final PWMSparkMax backLeft = new PWMSparkMax(4);
-  private final PWMSparkMax backLeftRot = new PWMSparkMax(5);
-  private final PWMSparkMax backRight = new PWMSparkMax(6);
-  private final PWMSparkMax backRightRot = new PWMSparkMax(7);
+  private final PWMSparkMax m_leftDrive = new PWMSparkMax(0);
+  private final PWMSparkMax m_rightDrive = new PWMSparkMax(1);
+  private final DifferentialDrive p1_controller =
+      new DifferentialDrive(m_leftDrive::set, m_rightDrive::set);
   private final XboxController m_controller = new XboxController(0);
   private final Timer m_timer = new Timer();
+
+  public Robot() {
+    SendableRegistry.addChild(p1_controller, m_leftDrive);
+    SendableRegistry.addChild(p1_controller, m_rightDrive);
+  }
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -35,12 +36,10 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
-    frontLeft.addFollower(backLeft);
-    frontLeft.addFollower(frontRight);
-    frontLeft.addFollower(backRight);
-    frontLeftRot.addFollower(backLeftRot);
-    frontLeftRot.addFollower(frontRightRot);
-    frontLeftRot.addFollower(backRightRot);
+    // We need to invert one side of the drivetrain so that positive voltages
+    // result in both sides moving forward. Depending on how your robot's
+    // gearbox is constructed, you might have to invert the left side instead.
+    m_rightDrive.setInverted(true);
   }
 
   /** This function is run once each time the robot enters autonomous mode. */
@@ -55,9 +54,9 @@ public class Robot extends TimedRobot {
     // Drive for 2 seconds
     if (m_timer.get() < 2.0) {
       // Drive forwards half speed, make sure to turn input squaring off
-      m_robotDrive.arcadeDrive(0.5, 0.0, false);
+      p1_controller.arcadeDrive(0.5, 0.0, false);
     } else {
-      m_robotDrive.stopMotor(); // stop robot
+      p1_controller.stopMotor(); // stop robot
     }
   }
 
@@ -68,7 +67,7 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during teleoperated mode. */
   @Override
   public void teleopPeriodic() {
-    m_robotDrive.arcadeDrive(-m_controller.getLeftY(), m_controller.getLeftX());
+    p1_controller.arcadeDrive(-m_controller.getLeftY(), -m_controller.getRightX());
   }
 
   /** This function is called once each time the robot enters test mode. */
