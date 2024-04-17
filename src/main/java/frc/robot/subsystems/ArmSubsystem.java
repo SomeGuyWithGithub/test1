@@ -30,7 +30,7 @@ public class ArmSubsystem extends SubsystemBase {
 
   private TrapezoidProfile.State m_targetState;
   private double m_feedforward;
-  private double m_manualValue;
+  // private double m_manualValue; // Comment this out when not in use
 
   /** Creates a new ArmSubsystem. */
   public ArmSubsystem() {
@@ -126,7 +126,7 @@ public class ArmSubsystem extends SubsystemBase {
             m_encoder.getPosition() + Constants.Arm.kArmZeroCosineOffset, m_targetState.velocity);
     // set the power of the motor
     m_motor.set(_power + (m_feedforward / 12.0));
-    m_manualValue = _power; // this variable is only used for logging or debugging if needed
+    // m_manualValue = _power; // this variable is only used for logging or debugging if needed, comment out when not in use
   }
 
   @Override
