@@ -2,7 +2,7 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.subsystems;
+package frc.robot.oldcode.subsystems;
 
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkBase.SoftLimitDirection;
@@ -15,7 +15,7 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.PIDGains;
-import frc.robot.Constants;
+import frc.robot.oldcode.Constants;
 
 public class ArmSubsystem extends SubsystemBase {
   private CANSparkMax m_motor;
@@ -126,7 +126,8 @@ public class ArmSubsystem extends SubsystemBase {
             m_encoder.getPosition() + Constants.Arm.kArmZeroCosineOffset, m_targetState.velocity);
     // set the power of the motor
     m_motor.set(_power + (m_feedforward / 12.0));
-    // m_manualValue = _power; // this variable is only used for logging or debugging if needed, comment out when not in use
+    // m_manualValue = _power; // this variable is only used for logging or debugging if needed,
+    // comment out when not in use
   }
 
   @Override

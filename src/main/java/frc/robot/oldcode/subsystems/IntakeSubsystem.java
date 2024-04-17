@@ -1,4 +1,4 @@
-package frc.robot.subsystems;
+package frc.robot.oldcode.subsystems;
 
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.PIDGains;
-import frc.robot.Constants;
+import frc.robot.oldcode.Constants;
 
 public class IntakeSubsystem extends SubsystemBase {
 
